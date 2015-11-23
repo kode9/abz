@@ -1,5 +1,5 @@
-#ifndef abz_thead_clock_hpp
-#define abz_thead_clock_hpp
+#ifndef abz_thread_clock_hpp
+#define abz_thread_clock_hpp
 
 /// @file thread_clock.hpp
 /// Per-thread CPU clock
@@ -19,8 +19,8 @@ public:
   /// @name Member types
   /// @{
   using duration = std::chrono::nanoseconds; ///< The time interval of the clock
-  using rep = duration::rep;                 ///<  Type representing the number of ticks in the clock duration
-  using period = duration::period;           ///< A std::ratio representing the number of ticks per second
+  using rep = duration::rep;       ///<  Type representing the number of ticks in the clock duration
+  using period = duration::period; ///< A std::ratio representing the number of ticks per second
   using time_point = std::chrono::time_point<thread_clock>; ///< A std::time_point for the clock
   /// @}
 
@@ -40,4 +40,4 @@ public:
 
 ABZ_NAMESPACE_END
 
-#endif // abz_thead_clock_hpp
+#endif // abz_thread_clock_hpp
