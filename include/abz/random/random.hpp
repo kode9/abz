@@ -120,8 +120,7 @@ inline void seed(const typename Engine::result_type value)
 ///
 /// @see random::seed()
 ///
-/// @param a The minimum value that can be generated.
-/// @param b The maximum value that can be generated.
+/// @param a, b The interval of the generated numbers
 ///
 /// @tparam T The type of number to generate (must be integral or floating point).
 /// @tparam Engine The random number generator to use (must satisfy
