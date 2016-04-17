@@ -64,7 +64,8 @@ struct uniform_distribution<Real, Engine, typename std::enable_if<std::is_floati
   static inline Real get(Engine &g, const Real a, const Real b)
   {
     return std::uniform_real_distribution<Real>{}(
-      g, typename std::uniform_real_distribution<Real>::param_type{a, b});
+      g, typename std::uniform_real_distribution<Real>::param_type{
+           a, std::nextafter(b, std::numeric_limits<Real>::max())});
   }
 };
 
@@ -111,12 +112,18 @@ inline void seed(const typename Engine::result_type value)
 ///
 /// Requires that
 /// @li \f$a \leq b\f$ for integral types
-/// @li \f$(a < b) \land (b < MAX(T)) \land ((b - a) < MAX(T))\f$ for floating point
+/// @li \f$(a \leq b) \land (b < MAX(T)) \land ((b - a) < MAX(T))\f$ for floating point
 /// types
 ///
-/// @note This function is thread-safe.
 /// @note This functions uses a thread_local instance of the engine. To reinitialize this engine
 /// with a new seed, see random::seed.
+///
+/// @note For floating point types, some existing implementations have a bug where they may
+/// occasionally return b (that is, std::nextafter(b, std::numeric_limits<Real>::max()) for this
+/// function). <a href="https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63176" target="_blank">GCC
+/// #63176</a> <a href="https://llvm.org/bugs/show_bug.cgi?id=18767" target="_blank">#LLVM
+/// #18767</a> <a href="http://open-std.org/JTC1/SC22/WG21/docs/lwg-active.html#2524"
+/// target="_blank">LWG #2524</a>.
 ///
 /// @see random::seed()
 ///
