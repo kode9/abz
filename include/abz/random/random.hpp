@@ -118,7 +118,7 @@ inline void seed(const typename Engine::result_type value)
 /// @note This functions uses a thread_local instance of the engine. To reinitialize this engine
 /// with a new seed, see random::seed.
 ///
-/// @note For floating point types, some existing implementations have a bug where they may
+/// @warning For floating point types, some existing implementations have a bug where they may
 /// occasionally return b (that is, std::nextafter(b, std::numeric_limits<Real>::max()) for this
 /// function). <a href="https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63176" target="_blank">GCC
 /// #63176</a> <a href="https://llvm.org/bugs/show_bug.cgi?id=18767" target="_blank">#LLVM
