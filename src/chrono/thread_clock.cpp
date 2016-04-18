@@ -1,4 +1,4 @@
-// Copyright (C) 2015 Pierre-Luc Perrier <pluc@the-pluc.net>
+// Copyright (C) 2015, 2016 Pierre-Luc Perrier <pluc-dev@the-pluc.net>
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
