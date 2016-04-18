@@ -25,12 +25,6 @@
 
 ABZ_NAMESPACE_BEGIN
 
-/// @cond ABZ_INTERNAL
-namespace _ {
-
-} // namespace _
-/// @endcond ABZ_INTERNAL
-
 namespace random {
 
 /// @name fill
