@@ -34,9 +34,8 @@ namespace _ {
 template <class Engine>
 Engine &thread_local_engine()
 {
-  // TODO random_device can actually throw: "Throws an implementation-defined
-  // exception derived from std::exception if a random number could not be
-  // generated."
+  // NOTE(pluc) random_device can actually throw: "Throws an implementation-defined exception
+  // derived from std::exception if a random number could not be generated."
   thread_local Engine g{std::random_device{}()};
   return g;
 }
@@ -45,27 +44,34 @@ template <class T, class Engine, class Enabled = void>
 struct uniform_distribution;
 
 template <class Integral, class Engine>
-struct uniform_distribution<Integral,
-                            Engine,
-                            typename std::enable_if<std::is_integral<Integral>::value>::type> {
-  static inline constexpr Integral default_min() { return Integral{0}; }
-  static inline constexpr Integral default_max() { return std::numeric_limits<Integral>::max(); }
-  static inline Integral get(Engine &g, const Integral a, const Integral b)
+struct uniform_distribution<Integral, Engine, typename std::enable_if<std::is_integral<Integral>::value>::type> {
+  using distribution_type = std::uniform_int_distribution<Integral>;
+  using param_type = typename distribution_type::param_type;
+  using result_type = Integral;
+
+  static inline constexpr result_type default_min() { return result_type{0}; }
+  static inline constexpr result_type default_max()
   {
-    return std::uniform_int_distribution<Integral>{}(
-      g, typename std::uniform_int_distribution<Integral>::param_type{a, b});
+    return std::numeric_limits<result_type>::max();
+  }
+  static inline result_type get(Engine &g, const Integral a, const Integral b)
+  {
+    return distribution_type{}(g, param_type{a, b});
   }
 };
 
 template <class Real, class Engine>
 struct uniform_distribution<Real, Engine, typename std::enable_if<std::is_floating_point<Real>::value>::type> {
-  static inline constexpr Real default_min() { return Real{0}; }
-  static inline constexpr Real default_max() { return Real{1}; }
-  static inline Real get(Engine &g, const Real a, const Real b)
+  using distribution_type = std::uniform_real_distribution<Real>;
+  using param_type = typename distribution_type::param_type;
+  using result_type = Real;
+
+  static inline constexpr result_type default_min() { return Real{0}; }
+  static inline constexpr result_type default_max() { return Real{1}; }
+  static inline result_type get(Engine &g, const Real a, const Real b)
   {
-    return std::uniform_real_distribution<Real>{}(
-      g, typename std::uniform_real_distribution<Real>::param_type{
-           a, std::nextafter(b, std::numeric_limits<Real>::max())});
+    return distribution_type{}(
+      g, param_type{a, std::nextafter(b, std::numeric_limits<result_type>::max())});
   }
 };
 
