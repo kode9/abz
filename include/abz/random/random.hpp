@@ -121,9 +121,6 @@ inline void seed(const typename Engine::result_type value)
 /// @li \f$(a \leq b) \land (b < MAX(T)) \land ((b - a) < MAX(T))\f$ for floating point
 /// types
 ///
-/// @note This functions uses a thread_local instance of the engine. To reinitialize this engine
-/// with a new seed, see random::seed.
-///
 /// @warning For floating point types, some existing implementations have a bug where they may
 /// occasionally return b (that is, std::nextafter(b, std::numeric_limits<Real>::max()) for this
 /// function). <a href="https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63176" target="_blank">GCC
@@ -131,18 +128,33 @@ inline void seed(const typename Engine::result_type value)
 /// #18767</a> <a href="http://open-std.org/JTC1/SC22/WG21/docs/lwg-active.html#2524"
 /// target="_blank">LWG #2524</a>.
 ///
-/// @see random::seed()
-///
+/// @param e A reference to a randon bit generator.
 /// @param a, b The interval of the generated numbers
 ///
 /// @tparam T The type of number to generate (must be integral or floating point).
-/// @tparam Engine The random number generator to use (must satisfy
-/// UniformRandomNumberGenerator concept).
-template <class T, class Engine = std::default_random_engine>
-inline T rand(T a = _::uniform_distribution<T, Engine>::default_min(),
-              T b = _::uniform_distribution<T, Engine>::default_max())
+/// @tparam Engine The random number generator type (must satisfy UniformRandomBitGenerator
+/// concept).
+template <class T, class Engine>
+inline auto rand(Engine &e,
+                 T const a = _::uniform_distribution<T, Engine>::default_min(),
+                 T const b = _::uniform_distribution<T, Engine>::default_max()) ->
+  typename _::uniform_distribution<T, Engine>::result_type
 {
-  return _::uniform_distribution<T, Engine>::get(_::thread_local_engine<Engine>(), a, b);
+  return _::uniform_distribution<T, Engine>::get(e, a, b);
+}
+
+/// @overload
+///
+/// This overload uses a thread local random bit generator. To reinitialize this engine with a new
+/// seed, see random::seed.
+///
+/// @see random::seed()
+template <class T, class Engine = std::default_random_engine>
+inline auto rand(T const a = _::uniform_distribution<T, Engine>::default_min(),
+                 T const b = _::uniform_distribution<T, Engine>::default_max()) ->
+  typename _::uniform_distribution<T, Engine>::result_type
+{
+  return rand(_::thread_local_engine<Engine>(), a, b);
 }
 
 ABZ_NAMESPACE_END
