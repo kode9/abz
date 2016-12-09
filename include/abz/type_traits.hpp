@@ -239,6 +239,96 @@ constexpr bool is_convertible_v = std::is_convertible<From, To>::value;
 
 #endif // __cpp_variable_templates
 
+/// @cond ABZ_INTERNAL
+namespace _ {
+
+// NOT
+template <class T>
+struct negate : std::conditional<T::value, std::false_type, std::true_type>::type {
+};
+
+// AND
+template <class...>
+struct all;
+template <>
+struct all<> : std::true_type {
+};
+template <class T>
+struct all<T> : T {
+};
+template <class Head, class... Tail>
+struct all<Head, Tail...> : std::conditional<Head::value, all<Tail...>, std::false_type>::type {
+};
+
+// OR
+template <class...>
+struct any;
+template <>
+struct any<> : std::false_type {
+};
+template <class T>
+struct any<T> : T {
+};
+template <class Head, class... Tail>
+struct any<Head, Tail...> : std::conditional<Head::value, std::true_type, any<Tail...>>::type {
+};
+
+// NOT any
+template <class...>
+struct none;
+template <>
+struct none<> : std::false_type {
+};
+template <class T>
+struct none<T> : negate<T> {
+};
+template <class Head, class... Tail>
+struct none<Head, Tail...> : std::conditional<Head::value, std::false_type, none<Tail...>>::type {
+};
+
+} // namespace _
+///@endcond
+
+/// Checks if every type has a @c type member that evaluates to true.
+template <class T>
+struct negate : _::negate<T> {
+};
+
+/// Checks if every type has a @c type member that evaluates to true.
+template <class... T>
+struct all : _::all<T...> {
+};
+
+/// Checks if at least one type has a @c type member that evaluates to true.
+template <class... T>
+struct any : _::any<T...> {
+};
+
+/// Checks if every type has a @c type member that evaluates to false.
+template <class... T>
+struct none : _::none<T...> {
+};
+
+#ifdef __cpp_variable_templates
+
+/// @relates negate
+template <class T>
+constexpr bool negate_v = negate<T>::value;
+
+/// @relates all
+template <class... T>
+constexpr bool all_v = all<T...>::value;
+
+/// @relates any
+template <class... T>
+constexpr bool any_v = any<T...>::value;
+
+/// @relates none
+template <class... T>
+constexpr bool none_v = none<T...>::value;
+
+#endif // __cpp_variable_templates
+
 ABZ_NAMESPACE_END
 
 #endif // abz_type_traits_hpp
