@@ -18,6 +18,7 @@
 /// Pseudorandom numbers generation.
 
 #include "abz/detail/macros.hpp"
+#include "abz/type_traits.hpp"
 
 #include <cmath> // std::nextafter
 #include <limits>
@@ -155,6 +156,80 @@ inline auto rand(T const a = _::uniform_distribution<T, Engine>::default_min(),
   typename _::uniform_distribution<T, Engine>::result_type
 {
   return rand(_::thread_local_engine<Engine>(), a, b);
+}
+
+/// Gets a (pseudo) random number distributed according to a given probability function.
+///
+/// @code
+/// using Dist = std::normal_distribution<double>;
+/// std::minstd_rand0 engine;     // The random bit generator
+/// Dist::param_type params{0., 1.}; // The distribution parameters
+/// const auto value = abz::rand<Dist>(engine, params);
+/// @endcode
+///
+/// @param e A reference to a randon bit generator.
+/// @param params The distribution parameters.
+///
+/// @tparam Distribution The statistical probability density function type
+/// (RandomNumberDistribution).
+/// @tparam Engine The random number generator type (UniformRandomBitGenerator).
+template <class Distribution, class Engine>
+inline auto rand(Engine &e, typename Distribution::param_type const &params) ->
+  typename Distribution::result_type
+{
+  return Distribution{}(e, params);
+}
+
+/// @overload
+///
+/// This overload takes standalone distribution parameters.
+///
+/// @code
+/// using Dist = std::normal_distribution<double>;
+/// std::minstd_rand0 engine; // The random bit generator
+/// const auto value = abz::rand<Dist>(engine, 0., 1.);
+/// @endcode
+template <class Distribution,
+          class Engine,
+          class... Params,
+          class = typename std::enable_if<all<std::is_arithmetic<Params>...>::value>::type>
+inline auto rand(Engine &e, Params &&... params) -> typename Distribution::result_type
+{
+  return rand<Distribution>(e, typename Distribution::param_type{std::forward<Params>(params)...});
+}
+
+/// @overload
+///
+/// This overload uses a thread local random bit generator.
+///
+/// @code
+/// using Dist = std::normal_distribution<double>;
+/// Dist::param_type params{0., 1.}; // The distribution parameters
+/// const auto value = abz::rand<Dist>(0., 1.);
+/// @endcode
+template <class Distribution, class Engine = std::default_random_engine>
+inline auto
+rand(const typename Distribution::param_type &params) -> typename Distribution::result_type
+{
+  return rand<Distribution>(_::thread_local_engine<Engine>(), params);
+}
+
+/// @overload
+///
+/// This overload uses a thread local random bit generator and takes standalone distributions
+/// parameters.
+///
+/// @code
+/// using Dist = std::normal_distribution<double>;
+/// const auto value = abz::rand<Dist>(0., 1.);
+/// @endcode
+template <class Distribution,
+          class Engine = std::default_random_engine,
+          class... Params,
+          class = typename std::enable_if<all<std::is_arithmetic<Params>...>::value>::type>
+inline auto rand(Params &&... params) -> typename Distribution::result_type
+{
+  return rand<Distribution>(typename Distribution::param_type{std::forward<Params>(params)...});
 }
 
 ABZ_NAMESPACE_END
