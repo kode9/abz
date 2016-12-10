@@ -12,11 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 cmake_minimum_required(VERSION 3.1)
-project(abz)
+project(abz VERSION 0.1.0 LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_library(abz SHARED src/chrono/thread_clock.cpp)
+set_target_properties(abz PROPERTIES
+  CXX_STANDARD 11
+  CXX_STANDARD_REQUIRED ON
+  CXX_EXTENSIONS OFF)
+target_compile_features(abz PUBLIC cxx_variable_templates)
+
 target_include_directories(abz PUBLIC include)
