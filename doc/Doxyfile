@@ -1981,25 +1981,38 @@ INCLUDE_FILE_PATTERNS  =
 # recursively expanded use the := operator instead of the = operator.
 # This tag requires that the tag ENABLE_PREPROCESSING is set to YES.
 
-PREDEFINED = ABZ_DOXYGEN \
-	     ABZ_OS_LINUX \
-	     ABZ_OS_AIX \
-	     ABZ_OS_HPUX \
-	     ABZ_OS_SOLARIS \
-	     ABZ_OS_WINDOWS \
-	     ABZ_OS_WIN32 \
-	     ABZ_OS_WIN64 \
-	     ABZ_OS_CYGWIN \
-	     ABZ_OS_APPLE \
-	     ABZ_OS_IOS_SIMULATOR \
-	     ABZ_OS_IOS \
-	     ABZ_OS_OSX \
-	     ABZ_OS_BSD \
-	     ABZ_OS_UNKNOWN \
-	     ABZ_OS_ANDROID \
-	     ABZ_OS_UNIX \
-	     ABZ_OS_POSIX \
-	     __cplusplus \
+PREDEFINED = __cplusplus \
+             ABZ_DOXYGEN \
+             ABZ_OS_LINUX \
+             ABZ_OS_AIX \
+             ABZ_OS_HPUX \
+             ABZ_OS_SOLARIS \
+             ABZ_OS_WINDOWS \
+             ABZ_OS_WIN32 \
+             ABZ_OS_WIN64 \
+             ABZ_OS_CYGWIN \
+             ABZ_OS_APPLE \
+             ABZ_OS_IOS_SIMULATOR \
+             ABZ_OS_IOS \
+             ABZ_OS_OSX \
+             ABZ_OS_BSD \
+             ABZ_OS_UNKNOWN \
+             ABZ_OS_ANDROID \
+             ABZ_OS_UNIX \
+             ABZ_OS_POSIX \
+             ABZ_COMPILER_GCC \
+             ABZ_COMPILER_CLANG \
+             ABZ_COMPILER_CLANG_APPLE \
+             ABZ_COMPILER_MAJOR \
+             ABZ_COMPILER_MINOR \
+             ABZ_COMPILER_PATCH \
+             ABZ_CXX98 \
+             ABZ_CXX11 \
+             ABZ_NO_CXX11 \
+             ABZ_CXX14 \
+             ABZ_NO_CXX14 \
+             ABZ_NO_CXX17 \
+             ABZ_CXX17
 
 # If the MACRO_EXPANSION and EXPAND_ONLY_PREDEF tags are set to YES then this
 # tag can be used to specify a list of macro names that should be expanded. The

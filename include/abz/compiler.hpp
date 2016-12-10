@@ -120,4 +120,20 @@
 /// @def ABZ_NO_CXX17
 /// The compiler does not support C++17 standard.
 
+#if defined(ABZ_DOXYGEN)
+#define ABZ_COMPILER_CLANG
+#define ABZ_COMPILER_CLANG_APPLE
+#define ABZ_COMPILER_GCC
+#define ABZ_COMPILER_MAJOR
+#define ABZ_COMPILER_MINOR
+#define ABZ_COMPILER_PATCH
+#define ABZ_CXX98
+#define ABZ_CXX11
+#define ABZ_NO_CXX11
+#define ABZ_CXX14
+#define ABZ_NO_CXX14
+#define ABZ_CXX17
+#define ABZ_NO_CXX17
+#endif
+
 #endif // abz_compiler_hpp

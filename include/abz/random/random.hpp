@@ -113,6 +113,14 @@ inline void seed(const typename Engine::result_type value)
 
 /// Gets a (pseudo) random number uniformly distributed on the interval \f$[a, b]\f$.
 ///
+/// @code
+/// std::minstd_rand0 engine; // The random bit generator
+/// // Gets a random double in the interval [0., 1.]
+/// abz::rand<double>(engine);
+/// // Gets a random double in the interval [-200., 200.]
+/// abz::rand<double>(engine, -200., 200.);
+/// @endcode
+///
 /// Default paramaters are
 /// @li \f$\{0, MAX(T)\}\f$ for integral types
 /// @li \f$\{0.0, 1.0\}\f$ for floating point types
@@ -125,7 +133,7 @@ inline void seed(const typename Engine::result_type value)
 /// @warning For floating point types, some existing implementations have a bug where they may
 /// occasionally return b (that is, std::nextafter(b, std::numeric_limits<Real>::max()) for this
 /// function). <a href="https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63176" target="_blank">GCC
-/// #63176</a> <a href="https://llvm.org/bugs/show_bug.cgi?id=18767" target="_blank">#LLVM
+/// #63176</a> <a href="https://llvm.org/bugs/show_bug.cgi?id=18767" target="_blank">LLVM
 /// #18767</a> <a href="http://open-std.org/JTC1/SC22/WG21/docs/lwg-active.html#2524"
 /// target="_blank">LWG #2524</a>.
 ///
@@ -146,8 +154,14 @@ inline auto rand(Engine &e,
 
 /// @overload
 ///
-/// This overload uses a thread local random bit generator. To reinitialize this engine with a new
-/// seed, see random::seed.
+/// This overload uses a thread local random bit generator.
+///
+/// @code
+/// // Gets a random double in the interval [0., 1.]
+/// abz::rand<double>();
+/// // Gets a random double in the interval [-200., 200.]
+/// abz::rand<double>(-200., 200.);
+/// @endcode
 ///
 /// @see random::seed()
 template <class T, class Engine = std::default_random_engine>
